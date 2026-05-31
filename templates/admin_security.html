@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Security Panel{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-shield-lock"></i> Security Panel</h2>
+        <a href="{{ url_for('security_logs') }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-journal-text"></i> Full Logs
+        </a>
+    </div>
+
+    <!-- Mode Toggle -->
+    <div class="card mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">Search Module Protection</h5>
+                <p class="text-muted small mb-0">
+                    Controls how the product search handles user input and SQL queries.
+                </p>
+            </div>
+            <form action="{{ url_for('toggle_mode') }}" method="POST">
+                {% if secure_mode %}
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-shield-check"></i> Secure Mode (active)
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-shield-exclamation"></i> Vulnerable Mode (active)
+                </button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-shield-x text-danger" style="font-size:2rem"></i>
+                    <h3 class="mt-2">{{ blocked_count }}</h3>
+                    <p class="text-muted mb-0">Attacks Blocked</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-header"><i class="bi bi-info-circle"></i> How Protection Works</div>
+                <div class="card-body small">
+                    <p><strong>Secure Mode:</strong> WAF blocks known SQL injection patterns. Search uses parameterised queries — user input is never part of the SQL command.</p>
+                    <p class="mb-0"><strong>Vulnerable Mode:</strong> WAF only logs (does not block). Search uses string concatenation — for demonstrating what happens without protection.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Payloads -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="bi bi-bug"></i> Test Payloads (paste in shop search)</div>
+        <div class="card-body">
+            <table class="table table-sm mb-0">
+                <thead><tr><th>Attack</th><th>Payload</th></tr></thead>
+                <tbody>
+                    <tr><td>Tautology</td><td><code>' OR '1'='1</code></td></tr>
+                    <tr><td>UNION injection</td><td><code>' UNION SELECT 1,username,password_hash,4,5,6 FROM users--</code></td></tr>
+                    <tr><td>Schema probe</td><td><code>' UNION SELECT 1,name,sql,4,5,6 FROM sqlite_master WHERE type='table'--</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Events -->
+    <div class="card">
+        <div class="card-header"><i class="bi bi-clock-history"></i> Recent Security Events</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover mb-0">
+                    <thead>
+                        <tr><th>Time</th><th>Type</th><th>Severity</th><th>Description</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for event in recent_events %}
+                        <tr>
+                            <td class="small">{{ event.timestamp[:19] }}</td>
+                            <td><code>{{ event.event_type }}</code></td>
+                            <td><span class="badge bg-{{ 'danger' if event.severity in ('critical','high') else 'warning' if event.severity == 'medium' else 'secondary' }}">{{ event.severity }}</span></td>
+                            <td class="small">{{ event.description[:60] }}{{ '...' if event.description|length > 60 }}</td>
+                            <td>{% if event.blocked %}<span class="badge bg-danger">Blocked</span>{% else %}<span class="badge bg-secondary">Logged</span>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                        {% if not recent_events %}
+                        <tr><td colspan="5" class="text-center text-muted py-4">No events yet</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

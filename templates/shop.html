@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<div class="shop-hero mb-4">
+    <div class="container text-center py-5">
+        <h1 class="display-5 fw-bold">Welcome to MiniShop</h1>
+        <p class="lead text-muted">Electronics, accessories &amp; more — find what you need.</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Search -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('shop') }}">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label">Search products</label>
+                        <input type="text" name="q" class="form-control form-control-lg"
+                               value="{{ query }}" placeholder="Laptop, headphones, keyboard...">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select form-select-lg">
+                            <option value="">All Categories</option>
+                            {% for cat in ['Electronics', 'Audio', 'Accessories', 'Storage', 'Networking', 'Office'] %}
+                            <option value="{{ cat }}" {{ 'selected' if category == cat }}>{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if query %}
+    <p class="text-muted mb-3">
+        Showing results for <strong>"{{ query }}"</strong>
+        {% if category %} in <strong>{{ category }}</strong>{% endif %}
+        — {{ products | length }} item(s)
+        <a href="{{ url_for('shop') }}" class="ms-2 small">Clear search</a>
+    </p>
+    {% endif %}
+
+    {% if error %}
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-octagon"></i> Something went wrong with your search. Please try again.
+    </div>
+    {% endif %}
+
+    <!-- Product Grid -->
+    {% if products %}
+    <div class="row g-4 mb-5">
+        {% for p in products %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card product-card h-100">
+                <div class="card-body d-flex flex-column">
+                    <span class="badge bg-secondary align-self-start mb-2">{{ p.category }}</span>
+                    <h5 class="card-title">{{ p.name }}</h5>
+                    <p class="card-text text-muted small flex-grow-1">{{ p.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <span class="product-price">${{ '%.2f' | format(p.price) }}</span>
+                        <span class="text-muted small">
+                            {% if p.stock > 0 %}
+                            <i class="bi bi-check-circle text-success"></i> In stock ({{ p.stock }})
+                            {% else %}
+                            <i class="bi bi-x-circle text-danger"></i> Out of stock
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center text-muted py-5">
+        <i class="bi bi-search" style="font-size:3rem"></i>
+        <p class="mt-3">No products found. Try a different search term.</p>
+    </div>
+    {% endif %}
+
+    <!-- Admin-only: technical details for demo -->
+    {% if session.get('role') == 'admin' and query and (waf_result or vulnerable_query or safe_query) %}
+    <div class="card border-secondary mb-4">
+        <div class="card-header">
+            <i class="bi bi-code-slash"></i> Admin — Search Module Debug
+            <span class="badge {{ 'bg-success' if secure_mode else 'bg-danger' }} ms-2">
+                {{ 'Secure Mode' if secure_mode else 'Vulnerable Mode' }}
+            </span>
+        </div>
+        <div class="card-body">
+            {% if waf_result %}
+            <p class="mb-2">
+                <strong>WAF:</strong>
+                <span class="text-{{ 'danger' if waf_result.is_malicious else 'success' }}">
+                    {{ 'MALICIOUS' if waf_result.is_malicious else 'CLEAN' }}
+                </span>
+                {% if waf_result.attack_type %} — {{ waf_result.attack_type }} ({{ waf_result.severity }}){% endif %}
+            </p>
+            {% endif %}
+            {% if vulnerable_query %}
+            <p class="small mb-1 text-danger"><strong>Vulnerable query:</strong></p>
+            <pre class="small"><code>{{ vulnerable_query }}</code></pre>
+            {% endif %}
+            {% if safe_query %}
+            <p class="small mb-1 text-success"><strong>Secure query:</strong></p>
+            <pre class="small"><code>{{ safe_query }}</code></pre>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: #161b22 !important;
+}
+
+.shop-hero {
+    background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%);
+    border-bottom: 1px solid #30363d;
+}
+
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-color: #30363d;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.product-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f0b429;
+}
+
+.card {
+    background-color: #161b22;
+    border-color: #30363d;
+}
+
+.card-header {
+    background-color: #1c2128;
+    border-bottom-color: #30363d;
+}
+
+.stat-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.table {
+    color: #c9d1d9;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(56, 139, 253, 0.1);
+}
+
+pre {
+    background-color: #0d1117 !important;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+
+code {
+    color: #79c0ff;
+}
+
+.alert-success {
+    background-color: rgba(46, 160, 67, 0.15);
+    border-color: rgba(46, 160, 67, 0.4);
+    color: #56d364;
+}
+
+.alert-danger {
+    background-color: rgba(248, 81, 73, 0.15);
+    border-color: rgba(248, 81, 73, 0.4);
+    color: #f85149;
+}
+
+.alert-info {
+    background-color: rgba(56, 139, 253, 0.15);
+    border-color: rgba(56, 139, 253, 0.4);
+    color: #58a6ff;
+}
+
+.alert-warning {
+    background-color: rgba(187, 128, 9, 0.15);
+    border-color: rgba(187, 128, 9, 0.4);
+    color: #d29922;
+}
+
+.list-group-item {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #c9d1d9;
+}
+
+.list-group-item:hover,
+.list-group-item-action:hover {
+    background-color: #1c2128;
+    color: #c9d1d9;
+}
+
+.form-control,
+.form-select {
+    background-color: #0d1117;
+    border-color: #30363d;
+    color: #c9d1d9;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #0d1117;
+    border-color: #58a6ff;
+    color: #c9d1d9;
+    box-shadow: 0 0 0 0.2rem rgba(56, 139, 253, 0.25);
+}
+
+.input-group-text {
+    background-color: #1c2128;
+    border-color: #30363d;
+    color: #8b949e;
+}
+
+.badge.bg-primary {
+    background-color: #1f6feb !important;
+}
+
+.btn-primary {
+    background-color: #e3a008;
+    border-color: #e3a008;
+    color: #0d1117;
+}
+
+.btn-primary:hover {
+    background-color: #f0b429;
+    border-color: #f0b429;
+    color: #0d1117;
+}
+
+.page-link {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #58a6ff;
+}
+
+.page-item.active .page-link {
+    background-color: #1f6feb;
+    border-color: #1f6feb;
+}
+
+.font-monospace {
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace !important;
+}
+
+.payload-item {
+    cursor: pointer;
+}
+
+.payload-item:active {
+    transform: scale(0.98);
+}
+
+.display-1 {
+    font-weight: 700;
+    letter-spacing: -2px;
+}

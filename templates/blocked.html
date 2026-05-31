@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Search Blocked{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-7">
+            <div class="card border-danger">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-exclamation-triangle text-danger" style="font-size:3rem"></i>
+                    <h3 class="mt-3">Search could not be completed</h3>
+                    <p class="text-muted">Your search query was flagged as potentially harmful and was blocked for your safety.</p>
+                    <a href="{{ url_for('shop') }}" class="btn btn-primary mt-3">
+                        <i class="bi bi-arrow-left"></i> Back to Shop
+                    </a>
+                </div>
+            </div>
+
+            {% if session.get('role') == 'admin' %}
+            <div class="card mt-3 border-secondary">
+                <div class="card-header"><i class="bi bi-shield-lock"></i> Admin — WAF Details</div>
+                <div class="card-body">
+                    <p><strong>Attack type:</strong> <code>{{ attack_type }}</code></p>
+                    <p><strong>Severity:</strong> <span class="badge bg-danger">{{ severity }}</span></p>
+                    {% if details %}
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>Rule</th><th>Severity</th><th>Matched</th></tr></thead>
+                        <tbody>
+                            {% for d in details %}
+                            <tr>
+                                <td><code>{{ d.type }}</code></td>
+                                <td>{{ d.severity }}</td>
+                                <td><code>{{ d.matched }}</code></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

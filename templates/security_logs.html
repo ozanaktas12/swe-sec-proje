@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Security Logs{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="{{ url_for('admin_security') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+        <h2 class="mb-0"><i class="bi bi-journal-text"></i> Security Logs</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <span>{{ total }} events total</span>
+            <span>Page {{ page }} / {{ total_pages }}</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Type</th>
+                            <th>Severity</th>
+                            <th>User</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td class="small text-nowrap">{{ log.timestamp[:19] }}</td>
+                            <td><code>{{ log.event_type }}</code></td>
+                            <td>
+                                <span class="badge bg-{{ 'danger' if log.severity in ('critical', 'high') else 'warning' if log.severity == 'medium' else 'secondary' }}">
+                                    {{ log.severity }}
+                                </span>
+                            </td>
+                            <td>{{ log.username or '—' }}</td>
+                            <td class="small">{{ log.description[:80] }}{{ '...' if log.description|length > 80 }}</td>
+                            <td>
+                                {% if log.blocked %}
+                                <span class="badge bg-danger">Blocked</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Logged</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if not logs %}
+                        <tr><td colspan="6" class="text-center text-muted py-4">No events found</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if total_pages > 1 %}
+        <div class="card-footer">
+            <nav>
+                <ul class="pagination pagination-sm justify-content-center mb-0">
+                    {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {{ 'active' if p == page }}">
+                        <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
