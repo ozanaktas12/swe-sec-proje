@@ -116,13 +116,15 @@ Vulnerable Mode'dayken `/shop` arama kutusuna yaz:
 
 ---
 
-## 3 Kişilik Ekip Rolleri
+## 3 Kişilik Ekip
 
-| Kişi | Konu | Okuması gereken dosya |
-|------|------|----------------------|
-| 1 | SQL Injection + Secure/Vulnerable mod | `app.py` → `_search_products()` |
-| 2 | WAF tespit motoru | `security/waf.py`, `before_request_hook()` |
-| 3 | Auth + loglama + veritabanı | `security/auth.py`, `database.py` |
+| Kişi | Branch | Konu | Dosya |
+|------|--------|------|-------|
+| Ozan | `member/ozan` | SQL Injection + arama modülü | `app.py` |
+| Demir | `member/demir` | WAF tespit motoru | `security/waf.py` |
+| Arda | `member/arda` | Auth + loglama | `security/auth.py`, `database.py` |
+
+Detaylı Git adımları: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
@@ -159,11 +161,14 @@ Herkes kendi branch'inde çalışır, `main` ana stabil proje kalır.
 |--------|------|
 | `main` | Hocaya sunulacak ana proje |
 | `develop` | Birleştirme / test alanı |
-| `member/isim` | Her ekip üyesinin kişisel çalışma alanı |
+| `member/ozan` | Ozan — SQL Injection + arama |
+| `member/demir` | Demir — WAF |
+| `member/arda` | Arda — Auth + loglama |
 
 Detaylı adımlar: **[CONTRIBUTING.md](CONTRIBUTING.md)**
 
 ```bash
-git checkout -b member/SENIN-ISMIN
-git push -u origin member/SENIN-ISMIN
+git clone https://github.com/ozanaktas12/swe-sec-proje.git
+cd swe-sec-proje
+git checkout member/demir   # kendi branch'in
 ```

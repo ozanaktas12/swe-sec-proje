@@ -6,10 +6,10 @@ Bu repoda herkes kendi branch'inde çalışır, bitince `main`'e birleştiririz.
 
 ```
 main                  ← Ana proje (hocaya sunulacak, stabil versiyon)
-develop               ← Entegrasyon (opsiyonel, birleştirme test alanı)
-member/ozan           ← Ozan'ın çalışma alanı
-member/arkadas1       ← 1. arkadaşın çalışma alanı
-member/arkadas2       ← 2. arkadaşın çalışma alanı
+develop               ← Entegrasyon (birleştirme test alanı)
+member/ozan           ← Ozan — SQL Injection + arama modülü
+member/demir          ← Demir — WAF tespit motoru
+member/arda           ← Arda — Auth + loglama
 ```
 
 **Kural:** Kimse doğrudan `main`'e push etmesin. Önce kendi branch'inde çalış, sonra Pull Request aç.
@@ -29,21 +29,14 @@ pip install -r requirements.txt
 
 ---
 
-## Kendi Branch'ini Oluşturma
+## Kendi Branch'ine Geçme
 
-`SENIN-ISMIN` yerine kendi adını yaz (küçük harf, boşluksuz):
+Branch'ler zaten oluşturuldu. Sadece checkout yap:
 
 ```bash
-git checkout main
-git pull origin main
-git checkout -b member/SENIN-ISMIN
-git push -u origin member/SENIN-ISMIN
-```
-
-Örnek:
-```bash
-git checkout -b member/ali
-git push -u origin member/ali
+git clone https://github.com/ozanaktas12/swe-sec-proje.git
+cd swe-sec-proje
+git checkout member/demir    # veya member/arda, member/ozan
 ```
 
 ---
@@ -57,7 +50,7 @@ git checkout member/SENIN-ISMIN
 # Kod yaz, test et...
 
 git add .
-git commit -m "Ali: WAF pattern listesine yeni kural eklendi"
+git commit -m "Demir: WAF pattern listesine yeni kural eklendi"
 git push
 ```
 
@@ -73,18 +66,18 @@ git push
 
 Alternatif terminal:
 ```bash
-gh pr create --base main --head member/SENIN-ISMIN --title "Ali: WAF güncellemesi" --body "Ne değişti açıklaması"
+gh pr create --base main --head member/demir --title "Demir: WAF güncellemesi" --body "Ne değişti açıklaması"
 ```
 
 ---
 
 ## Hangi Dosyada Kim Çalışır?
 
-| Kişi | Konu | Dosyalar |
-|------|------|----------|
-| Kişi 1 | SQL Injection + arama modülü | `app.py` → `_search_products()` |
-| Kişi 2 | WAF tespit motoru | `security/waf.py` |
-| Kişi 3 | Auth + loglama | `security/auth.py`, `database.py` |
+| Kişi | Branch | Konu | Dosyalar |
+|------|--------|------|----------|
+| Ozan | `member/ozan` | SQL Injection + arama modülü | `app.py` → `_search_products()` |
+| Demir | `member/demir` | WAF tespit motoru | `security/waf.py` |
+| Arda | `member/arda` | Auth + loglama | `security/auth.py`, `database.py` |
 
 Herkes kendi dosyalarında çalışır, başkasının dosyasına dokunmadan önce ekip grubunda yaz.
 
@@ -105,6 +98,5 @@ git push
 
 ## Branch İsimlendirme Kuralları
 
-- Küçük harf, tire ile: `member/ali`, `member-ayse` değil → `member/ayse`
-- Türkçe karakter kullanma: `member/ozan` ✅ — `member/özan` ❌
+- Küçük harf: `member/ozan`, `member/demir`, `member/arda`
 - Feature branch: `feature/rapor-taslagi`, `feature/slide-deck` gibi de açılabilir
